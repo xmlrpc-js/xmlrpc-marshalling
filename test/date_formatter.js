@@ -1,6 +1,6 @@
 var vows           = require('vows')
   , assert         = require('assert')
-  , date_formatter = require('../lib/date_formatter')
+  , date_formatter = require('../lib/date_formatter').getInstance()
 
 var LOCAL_DATE = new Date(2014,0,20,14,25,25);
 
