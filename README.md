@@ -106,6 +106,8 @@ XML-RPC implementations must be precise so there are an extensive set of test
 cases in the test directory. [Vows](http://vowsjs.org/) is the testing 
 framework.
 
+[![Build Status](https://travis-ci.org/xmlrpc-js/xmlrpc-marshalling.svg?branch=master)](http://travis-ci.org/xmlrpc-js/xmlrpc-marshalling)
+
 To run the test suite:
 
 `make test`
