@@ -2,13 +2,13 @@ var vows       = require('vows')
   , path       = require('path')
   , fs         = require('fs')
   , assert     = require('assert')
-  , Serializer = require('../lib/marshaller')
+  , Marshaller = require('../lib/marshaller')
   , CustomType = require('../lib/customtype')
   , util = require('util')
 
-vows.describe('Serializer').addBatch({
+vows.describe('Marshaller').addBatch({
 
-  'serializeMethodCall() called with': {
+  'marshalMethodCall() called with': {
 
     'type': {
 
@@ -16,14 +16,14 @@ vows.describe('Serializer').addBatch({
         'with a true boolean param' : {
           topic: function () {
             var value = true
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the value 1': assertXml('good_food/boolean_true_call.xml')
         }
       , 'with a false boolean param' : {
           topic: function () {
             var value = false
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the value 0': assertXml('good_food/boolean_false_call.xml')
         }
@@ -33,7 +33,7 @@ vows.describe('Serializer').addBatch({
         'with a regular datetime param' : {
           topic: function () {
             var value = new Date(2012, 05, 07, 11, 35, 10)
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the timestamp': assertXml('good_food/datetime_call.xml')
         }
@@ -43,7 +43,7 @@ vows.describe('Serializer').addBatch({
         'with a base64 param' : {
           topic: function () {
             var value = new Buffer('dGVzdGluZw==', 'base64')
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the base64 string': assertXml('good_food/base64_call.xml')
         }
@@ -53,14 +53,14 @@ vows.describe('Serializer').addBatch({
         'with a positive double param' : {
           topic: function () {
             var value = 17.5
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the positive double': assertXml('good_food/double_positive_call.xml')
         }
       , 'with a negative double param' : {
           topic: function () {
             var value = -32.7777
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the negative double': assertXml('good_food/double_negative_call.xml')
         }
@@ -70,21 +70,21 @@ vows.describe('Serializer').addBatch({
         'with a positive integer param' : {
           topic: function () {
             var value = 17
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the positive integer': assertXml('good_food/int_positive_call.xml')
         }
       , 'with a negative integer param' : {
           topic: function () {
             var value = -32
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the negative integer': assertXml('good_food/int_negative_call.xml')
         }
       , 'with an integer param of 0' : {
           topic: function () {
             var value = 0
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains 0': assertXml('good_food/int_zero_call.xml')
         }
@@ -94,7 +94,7 @@ vows.describe('Serializer').addBatch({
         'with a null param' : {
           topic: function () {
             var value = null
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the nil': assertXml('good_food/nil_call.xml')
         }
@@ -104,28 +104,28 @@ vows.describe('Serializer').addBatch({
         'with a regular string param' : {
           topic: function () {
             var value = 'testString'
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the string': assertXml('good_food/string_call.xml')
         }
       , 'with a string param that requires CDATA' : {
           topic: function () {
             var value = '<html><body>Congrats</body></html>'
-            return Serializer.serializeMethodCall('testCDATAMethod', [value])
+            return Marshaller.marshalMethodCall('testCDATAMethod', [value])
           }
         , 'contains the CDATA-wrapped string': assertXml('good_food/string_cdata_call.xml')
         }
       , 'with a multiline string param that requires CDATA' : {
           topic: function () {
             var value = '<html>\n<head><title>Go testing!</title></head>\n<body>Congrats</body>\n</html>'
-            return Serializer.serializeMethodCall('testCDATAMethod', [value])
+            return Marshaller.marshalMethodCall('testCDATAMethod', [value])
           }
         , 'contains the CDATA-wrapped string': assertXml('good_food/string_multiline_cdata_call.xml')
         }
       , 'with an empty string' : {
           topic: function () {
             var value = ''
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the empty string': assertXml('good_food/string_empty_call.xml')
         }
@@ -135,7 +135,7 @@ vows.describe('Serializer').addBatch({
         'with an undefined param' : {
           topic: function () {
             var value = undefined
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the empty value': assertXml('good_food/undefined_call.xml')
         }
@@ -149,7 +149,7 @@ vows.describe('Serializer').addBatch({
         'with a simple array' : {
           topic: function () {
             var value = ['string1', 3]
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the array': assertXml('good_food/array_call.xml')
         }
@@ -162,7 +162,7 @@ vows.describe('Serializer').addBatch({
               stringName: 'string1'
             , intName: 3
             }
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the struct': assertXml('good_food/struct_call.xml')
         }
@@ -172,7 +172,7 @@ vows.describe('Serializer').addBatch({
               stringName: ''
             , intName: 3
             }
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the struct': assertXml('good_food/struct_empty_property_call.xml')
         }
@@ -184,7 +184,7 @@ vows.describe('Serializer').addBatch({
                 intName: 4
               }
             }
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the struct': assertXml('good_food/struct_nested_call.xml')
         }
@@ -195,7 +195,7 @@ vows.describe('Serializer').addBatch({
         'default' : {
             topic: function () {
               var value = new CustomType('testCustomType')
-              return Serializer.serializeMethodCall('testMethod', [value])
+              return Marshaller.marshalMethodCall('testMethod', [value])
             }
           , 'contains the customType': assertXml('good_food/customtype_call.xml')
         }
@@ -208,14 +208,14 @@ vows.describe('Serializer').addBatch({
             util.inherits(ExtendedCustomType, CustomType)
             ExtendedCustomType.prototype.tagName = 'extendedCustomType'
             var value = new ExtendedCustomType('TestCustomType')
-            return Serializer.serializeMethodCall('testMethod', [value])
+            return Marshaller.marshalMethodCall('testMethod', [value])
           }
         , 'contains the customType': assertXml('good_food/customtype_extended_call.xml')
       }
     }
   }
 
-, 'serializeMethodResponse() called with': {
+, 'marshalMethodResponse() called with': {
 
     'type': {
 
@@ -223,14 +223,14 @@ vows.describe('Serializer').addBatch({
         'with a true boolean param' : {
           topic: function () {
             var value = true
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the value 1': assertXml('good_food/boolean_true_response.xml')
         }
       , 'with a false boolean param' : {
           topic: function () {
             var value = false
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the value 0': assertXml('good_food/boolean_false_response.xml')
         }
@@ -240,7 +240,7 @@ vows.describe('Serializer').addBatch({
         'with a regular datetime param' : {
           topic: function () {
             var value = new Date(2012, 5, 8, 11, 35, 10)
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the timestamp': assertXml('good_food/datetime_response.xml')
         }
@@ -250,7 +250,7 @@ vows.describe('Serializer').addBatch({
         'with a base64 param' : {
           topic: function () {
             var value = new Buffer('dGVzdGluZw==', 'base64')
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the base64 string': assertXml('good_food/base64_response.xml')
         }
@@ -260,14 +260,14 @@ vows.describe('Serializer').addBatch({
         'with a positive double param' : {
           topic: function () {
             var value = 3.141592654
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the positive double': assertXml('good_food/double_positive_response.xml')
         }
       , 'with a negative double param' : {
           topic: function () {
             var value = -1.41421
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the negative double': assertXml('good_food/double_negative_response.xml')
         }
@@ -277,21 +277,21 @@ vows.describe('Serializer').addBatch({
         'with a positive integer param' : {
           topic: function () {
             var value = 4
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the positive integer': assertXml('good_food/int_positive_response.xml')
         }
       , 'with a negative integer param' : {
           topic: function () {
             var value = -4
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the negative integer': assertXml('good_food/int_negative_response.xml')
         }
       , 'with an integer param of 0' : {
           topic: function () {
             var value = 0
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains 0': assertXml('good_food/int_zero_response.xml')
         }
@@ -301,14 +301,14 @@ vows.describe('Serializer').addBatch({
         'with a regular string param' : {
           topic: function () {
             var value = 'testString'
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the string': assertXml('good_food/string_response.xml')
         }
       , 'with an empty string' : {
           topic: function () {
             var value = ''
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the empty string': assertXml('good_food/string_empty_response.xml')
         }
@@ -318,7 +318,7 @@ vows.describe('Serializer').addBatch({
         'with an undefined param' : {
           topic: function () {
             var value = undefined
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the empty value': assertXml('good_food/undefined_response.xml')
         }
@@ -332,7 +332,7 @@ vows.describe('Serializer').addBatch({
         'with a simple array' : {
           topic: function () {
             var value = [178, 'testString']
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the array': assertXml('good_food/array_response.xml')
         }
@@ -344,7 +344,7 @@ vows.describe('Serializer').addBatch({
             var value = {
               'the-Name': 'testValue'
             }
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the struct': assertXml('good_food/struct_response.xml')
         }
@@ -357,7 +357,7 @@ vows.describe('Serializer').addBatch({
               }
             , lastName: 'Smith'
             }
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the struct': assertXml('good_food/struct_nested_response.xml')
         }
@@ -370,7 +370,7 @@ vows.describe('Serializer').addBatch({
               faultCode: 4
             , faultString: 'Too many parameters.'
             }
-            return Serializer.serializeFault(value)
+            return Marshaller.marshalFault(value)
           }
         , 'contains the fault': assertXml('good_food/fault.xml')
         }
@@ -382,7 +382,7 @@ vows.describe('Serializer').addBatch({
       'default' : {
           topic: function () {
             var value = new CustomType('testCustomType')
-            return Serializer.serializeMethodResponse(value)
+            return Marshaller.marshalMethodResponse(value)
           }
         , 'contains the customType': assertXml('good_food/customtype_response.xml')
       }
@@ -395,7 +395,7 @@ vows.describe('Serializer').addBatch({
           util.inherits(ExtendedCustomType, CustomType)
           ExtendedCustomType.prototype.tagName = 'extendedCustomType'
           var value = new ExtendedCustomType('TestCustomType')
-          return Serializer.serializeMethodResponse(value)
+          return Marshaller.marshalMethodResponse(value)
         }
       , 'contains the customType': assertXml('good_food/customtype_extended_response.xml')
       }
