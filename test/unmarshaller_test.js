@@ -2,7 +2,7 @@ var vows   = require('vows')
   , path = require('path')
   , fs = require('fs')
   , assert = require('assert')
-  , Deserializer = require('../lib/deserializer')
+  , Deserializer = require('../lib/unmarshaller')
   , error_gallery = process.env.XMLRPC_ERROR_GALLERY
 
 

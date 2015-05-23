@@ -2,7 +2,7 @@ var vows       = require('vows')
   , path       = require('path')
   , fs         = require('fs')
   , assert     = require('assert')
-  , Serializer = require('../lib/serializer')
+  , Serializer = require('../lib/marshaller')
   , CustomType = require('../lib/customtype')
   , util = require('util')
 
